@@ -8,6 +8,6 @@ app.use('/users', userRoutes);
 
 db.sequelize.sync().then((req)=>{
     app.listen(4000,()=>{
-        console.log("Server Running")
+        console.log("Server Running on PORT 4000")
     })
 })
