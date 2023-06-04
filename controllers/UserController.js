@@ -49,6 +49,16 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Validate email format
+    if (!isValidEmail(email)) {
+      throw new Error('Invalid email format.');
+    }
+
+    // Validate password length
+    if (!isValidPassword(password)) {
+      throw new Error('Invalid password length.');
+    }
+
     // Find the user by email
     const user = await User.findOne({ where: { email } });
 
@@ -71,6 +81,21 @@ const login = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+// Helper function to validate email format
+function isValidEmail(email) {
+  // Use a regular expression to validate the email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Helper function to validate password length
+function isValidPassword(password) {
+  // Set a minimum password length (e.g., 8 characters)
+  const minLength = 8;
+  return password.length >= minLength;
+}
+
 
 module.exports = {
   signup,
