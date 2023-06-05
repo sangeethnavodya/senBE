@@ -19,6 +19,11 @@ const signup = async (req, res) => {
     if (!firstName || !lastName || !email || !password || !role) {
       throw new Error('Required fields are missing. Please provide all required information.');
     }
+    
+    // Validate password length
+    if (!isValidPassword(password)) {
+      throw new Error('Invalid password length.');
+    }
 
     if (role === 'customer' && (!companyName || !companyURL || !companyRegistrationNumber)) {
       throw new Error('Company information is missing. Please provide all required information for the customer role.');
@@ -54,10 +59,6 @@ const login = async (req, res) => {
       throw new Error('Invalid email format.');
     }
 
-    // Validate password length
-    if (!isValidPassword(password)) {
-      throw new Error('Invalid password length.');
-    }
 
     // Find the user by email
     const user = await User.findOne({ where: { email } });
@@ -75,7 +76,10 @@ const login = async (req, res) => {
 
     // Generate JWT
     const token = jwt.sign({ userId: user.id }, 'your_secret_key');
-
+    // Validate password length
+    if (!isValidPassword(password)) {
+      throw new Error('Invalid password length.');
+    }
     res.json({ message: 'Login successful.', token });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -99,5 +103,6 @@ function isValidPassword(password) {
 
 module.exports = {
   signup,
-  login, 
+  login,
 };
+ 
