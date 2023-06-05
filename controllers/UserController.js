@@ -28,6 +28,9 @@ const signup = async (req, res) => {
     if (role === 'customer' && (!companyName || !companyURL || !companyRegistrationNumber)) {
       throw new Error('Company information is missing. Please provide all required information for the customer role.');
     }
+    if (role === 'driver' && (companyName || companyURL || companyRegistrationNumber)) {
+      throw new Error('driver can not input company name or company URL or companyRegistrationNumber');
+    }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
